@@ -2,8 +2,8 @@
 // CONFIGURATION - I-EDIT MO DITO
 // ============================================
 const CONFIG = {
-  password: "loveydovy", // lowercase para case-insensitive
-  anniversaryDate: "2025-07-08T00:00:00", // I-adjust base sa actual 15th monthsary date niyo
+  password: "loveydovy",
+  anniversaryDate: "2026-07-08T00:00:00",
 };
 
 // ============================================
@@ -51,7 +51,7 @@ function updateMiniCountdown() {
 }
 
 updateMiniCountdown();
-setInterval(updateMiniCountdown, 1000 * 60); // update every minute
+setInterval(updateMiniCountdown, 1000 * 60);
 
 // ============================================
 // COUNTDOWN - FULL (Hero Section)
@@ -103,7 +103,6 @@ function checkPassword() {
   const enteredPassword = passwordInput.value.trim().toLowerCase();
 
   if (enteredPassword === CONFIG.password.toLowerCase()) {
-    // Success! I-unlock
     lockScreen.style.transition = "opacity 0.8s ease, transform 0.8s ease";
     lockScreen.style.opacity = "0";
     lockScreen.style.transform = "scale(1.1)";
@@ -119,7 +118,6 @@ function checkPassword() {
     passwordInput.value = "";
     passwordInput.focus();
     
-    // Shake animation
     passwordInput.style.animation = "none";
     setTimeout(() => {
       passwordInput.style.animation = "shake 0.5s ease";
@@ -134,7 +132,6 @@ passwordInput.addEventListener('keypress', function(e) {
   }
 });
 
-// Shake animation via JS-injected style
 const shakeStyle = document.createElement('style');
 shakeStyle.innerHTML = `
   @keyframes shake {
@@ -146,7 +143,7 @@ shakeStyle.innerHTML = `
 document.head.appendChild(shakeStyle);
 
 // ============================================
-// CONFETTI WELCOME (pagkatapos mag-unlock)
+// CONFETTI WELCOME
 // ============================================
 function triggerConfettiWelcome() {
   const colors = ['#ff6b9d', '#ff8fab', '#ffb3c6', '#dc143c', '#ffffff'];
@@ -187,7 +184,7 @@ function createConfettiPiece(color) {
 }
 
 // ============================================
-// CURSOR EFFECT (Desktop: Mouse trail | Mobile: Tap burst)
+// CURSOR EFFECT
 // ============================================
 const canvas = document.getElementById('cursorCanvas');
 const ctx = canvas.getContext('2d');
@@ -242,17 +239,15 @@ function animateParticles() {
 
 animateParticles();
 
-// Desktop: mouse move trail (throttled para hindi mabigat)
 let lastMouseMove = 0;
 document.addEventListener('mousemove', (e) => {
   const now = Date.now();
-  if (now - lastMouseMove > 50) { // every 50ms lang
+  if (now - lastMouseMove > 50) {
     particles.push(new Particle(e.clientX, e.clientY));
     lastMouseMove = now;
   }
 });
 
-// Mobile: tap/touch burst effect
 document.addEventListener('touchstart', (e) => {
   const touch = e.touches[0];
   for (let i = 0; i < 8; i++) {
@@ -260,7 +255,6 @@ document.addEventListener('touchstart', (e) => {
   }
 });
 
-// Click burst effect (both desktop and mobile)
 document.addEventListener('click', (e) => {
   for (let i = 0; i < 6; i++) {
     particles.push(new Particle(e.clientX, e.clientY));
@@ -272,8 +266,8 @@ document.addEventListener('click', (e) => {
 // ============================================
 const audioPlayer = document.getElementById('audioPlayer');
 const playPauseBtn = document.getElementById('playPauseBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const musicPrevBtn = document.getElementById('prevBtn');
+const musicNextBtn = document.getElementById('nextBtn');
 const songTitle = document.getElementById('songTitle');
 
 const playlist = [
@@ -312,23 +306,23 @@ playPauseBtn.addEventListener('click', () => {
   }
 });
 
-nextBtn.addEventListener('click', () => {
+musicNextBtn.addEventListener('click', () => {
   currentSongIndex = (currentSongIndex + 1) % playlist.length;
   loadSong(currentSongIndex);
   if (isPlaying) playSong();
 });
 
-prevBtn.addEventListener('click', () => {
+musicPrevBtn.addEventListener('click', () => {
   currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
   loadSong(currentSongIndex);
   if (isPlaying) playSong();
 });
 
 audioPlayer.addEventListener('ended', () => {
-  nextBtn.click(); // auto next pag natapos
+  musicNextBtn.click();
 });
 
-loadSong(currentSongIndex); // initial load
+loadSong(currentSongIndex);
 
 // ============================================
 // REASON CARDS - FLIP ON CLICK
@@ -342,7 +336,163 @@ reasonCards.forEach(card => {
 });
 
 // ============================================
-// TIMELINE - SCROLL ANIMATION (Intersection Observer)
+// GALLERY CAROUSEL (Reusable - gagana sa page at sa modal)
+// ============================================
+function setupCarousel(carousel) {
+  const track = carousel.querySelector('.carousel-track');
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const prevBtn = carousel.querySelector('.prev-btn');
+  const nextBtn = carousel.querySelector('.next-btn');
+  const dotsContainer = carousel.querySelector('.carousel-dots');
+
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('carousel-dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goToSlide(i);
+      resetAutoSlide();
+    });
+    dotsContainer.appendChild(dot);
+  }
+
+  const dots = dotsContainer.querySelectorAll('.carousel-dot');
+
+  function updateCarousel() {
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function goToSlide(index) {
+    currentIndex = index;
+    updateCarousel();
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateCarousel();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+  }
+
+  nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    nextSlide();
+    resetAutoSlide();
+  });
+
+  prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    prevSlide();
+    resetAutoSlide();
+  });
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  track.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  track.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+    if (diff > swipeThreshold) {
+      nextSlide();
+      resetAutoSlide();
+    } else if (diff < -swipeThreshold) {
+      prevSlide();
+      resetAutoSlide();
+    }
+  }
+
+  let autoSlideInterval = setInterval(nextSlide, 5000);
+
+  function resetAutoSlide() {
+    clearInterval(autoSlideInterval);
+    autoSlideInterval = setInterval(nextSlide, 5000);
+  }
+
+  carousel._autoSlideInterval = autoSlideInterval;
+  carousel._clearAutoSlide = () => clearInterval(autoSlideInterval);
+}
+
+function initAllCarousels() {
+  const carousels = document.querySelectorAll('[data-carousel]');
+  carousels.forEach(carousel => setupCarousel(carousel));
+}
+
+initAllCarousels();
+
+// ============================================
+// TIMELINE CARD MODAL (Pop-up sa gitna ng screen)
+// ============================================
+const cardModal = document.getElementById('cardModal');
+const modalBody = document.getElementById('modalBody');
+const modalClose = document.getElementById('modalClose');
+const modalOverlay = document.getElementById('modalOverlay');
+
+function openCardModal(originalContent) {
+  modalBody.innerHTML = '';
+
+  const clone = originalContent.cloneNode(true);
+  modalBody.appendChild(clone);
+
+  const clonedCarousel = clone.querySelector('[data-carousel]');
+  if (clonedCarousel) {
+    setupCarousel(clonedCarousel);
+  }
+
+  cardModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCardModal() {
+  cardModal.classList.remove('active');
+  document.body.style.overflow = '';
+
+  const clonedCarousel = modalBody.querySelector('[data-carousel]');
+  if (clonedCarousel && clonedCarousel._clearAutoSlide) {
+    clonedCarousel._clearAutoSlide();
+  }
+
+  setTimeout(() => {
+    modalBody.innerHTML = '';
+  }, 300);
+}
+
+document.querySelectorAll('.timeline-content').forEach(content => {
+  content.addEventListener('click', () => {
+    openCardModal(content);
+  });
+});
+
+modalClose.addEventListener('click', closeCardModal);
+modalOverlay.addEventListener('click', closeCardModal);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && cardModal.classList.contains('active')) {
+    closeCardModal();
+  }
+});
+
+// ============================================
+// TIMELINE - SCROLL ANIMATION
 // ============================================
 const timelineItems = document.querySelectorAll('.timeline-item');
 
@@ -363,7 +513,7 @@ timelineItems.forEach(item => {
 });
 
 // ============================================
-// SMOOTH SCROLL para sa "Tara Balikan Natin" link
+// SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {

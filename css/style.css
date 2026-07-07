@@ -449,7 +449,6 @@ h1, h2, h3 {
   margin-bottom: 10px;
 }
 
-/* ✅ UPDATED: mas flexible na para sa mahabang text */
 .timeline-date {
   display: inline-block;
   background: var(--pink-light);
@@ -463,7 +462,7 @@ h1, h2, h3 {
 }
 
 /* ============================================
-   GALLERY CAROUSEL
+   GALLERY CAROUSEL (Default - sa Timeline Cards)
 ============================================ */
 .gallery-carousel {
   position: relative;
@@ -620,7 +619,26 @@ h1, h2, h3 {
   transform: rotate(90deg);
 }
 
-.modal-content .gallery-carousel { height: 320px; }
+/* ✅ UPDATED: Modal carousel - FULL IMAGE, walang crop */
+.modal-content .gallery-carousel {
+  height: 70vh;
+  max-height: 600px;
+  background: #fff5f7;
+}
+
+.modal-content .carousel-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content .carousel-slide img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
 
 .modal-content .timeline-content {
   box-shadow: none;
@@ -1010,18 +1028,6 @@ h1, h2, h3 {
   gap: 8px;
 }
 
-/* Pulse hint animation kung naka-block ang autoplay */
-@keyframes pulseHint {
-  0%, 100% { 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
-    transform: scale(1);
-  }
-  50% { 
-    box-shadow: 0 8px 35px rgba(255, 107, 157, 0.6); 
-    transform: scale(1.05);
-  }
-}
-
 .music-controls button {
   background: var(--pink-light);
   border: none;
@@ -1034,6 +1040,18 @@ h1, h2, h3 {
 }
 
 .music-controls button:hover { background: var(--pink-hot); }
+
+/* Pulse hint animation kung naka-block ang autoplay */
+@keyframes pulseHint {
+  0%, 100% { 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 8px 35px rgba(255, 107, 157, 0.6); 
+    transform: scale(1.05);
+  }
+}
 
 /* ============================================
    FOOTER
@@ -1073,7 +1091,13 @@ h1, h2, h3 {
 
   .gallery-carousel { height: 220px; }
   .modal-content { padding: 25px 20px; max-width: 500px; }
-  .modal-content .gallery-carousel { height: 250px; }
+  
+  /* ✅ UPDATED: Modal carousel sa tablet */
+  .modal-content .gallery-carousel { 
+    height: 55vh; 
+    max-height: 450px; 
+  }
+
   .reasons-grid { grid-template-columns: repeat(2, 1fr); }
 
   .music-player { max-width: 280px; padding: 10px 15px; }
@@ -1098,7 +1122,13 @@ h1, h2, h3 {
   .section-title { font-size: 1.8rem; }
   .gallery-carousel { height: 180px; }
   .modal-content { padding: 20px 15px; max-height: 90vh; }
-  .modal-content .gallery-carousel { height: 200px; }
+  
+  /* ✅ UPDATED: Modal carousel sa mobile */
+  .modal-content .gallery-carousel { 
+    height: 45vh; 
+    max-height: 350px; 
+  }
+
   .modal-close { width: 32px; height: 32px; font-size: 1.3rem; }
   .reasons-grid { grid-template-columns: 1fr; }
   .reason-card { height: 150px; }

@@ -619,7 +619,7 @@ h1, h2, h3 {
   transform: rotate(90deg);
 }
 
-/* ✅ UPDATED: Modal carousel - FULL IMAGE, walang crop */
+/* ✅ UPDATED: Modal carousel - FULL IMAGE with blurred background fill */
 .modal-content .gallery-carousel {
   height: 70vh;
   max-height: 600px;
@@ -659,39 +659,6 @@ h1, h2, h3 {
   object-fit: contain;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-}
-
-.modal-content .carousel-slide img {
- width: auto !important;
-  height: auto !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-  object-fit: contain !important;
-  object-position: center !important;
-}
-
-.modal-content .carousel-slide {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-}
-
-.modal-content .carousel-slide::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image: inherit;
-  background-size: cover;
-  background-position: center;
-  filter: blur(20px) brightness(0.7);
-  transform: scale(1.1);
-  z-index: 0;
-}
-
-.modal-content .carousel-slide img {
-  position: relative;
-  z-index: 1;
 }
 
 .modal-content .timeline-content {
@@ -1027,16 +994,84 @@ h1, h2, h3 {
   margin-bottom: 10px;
 }
 
+/* ============================================
+   ✨ SIGNATURE STYLING - Parang Totoong Pirma ✨
+============================================ */
+.signature-wrapper {
+  position: relative;
+  display: inline-block;
+  text-align: right;
+}
+
 .letter-signature-name {
   font-family: 'Dancing Script', cursive;
-  font-size: 3rem;
-  color: var(--red-crimson);
-  animation: signatureAppear 1s ease;
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #dc143c 0%, #ff6b9d 50%, #ff8fab 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+  animation: signatureAppear 1.2s ease;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px rgba(220, 20, 60, 0.15);
+}
+
+/* Decorative underline swash - parang totoong pirma */
+.letter-signature-name::after {
+  content: '';
+  display: block;
+  width: 90%;
+  height: 3px;
+  margin: 2px auto 0 10%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--pink-hot) 20%, 
+    var(--red-crimson) 50%, 
+    var(--pink-hot) 80%, 
+    transparent 100%);
+  border-radius: 10px;
+  animation: swashDraw 1s ease 0.3s both;
+}
+
+@keyframes swashDraw {
+  from { 
+    width: 0%; 
+    opacity: 0;
+  }
+  to { 
+    width: 90%; 
+    opacity: 1;
+  }
+}
+
+/* Floating heart beside signature */
+.signature-flourish {
+  display: inline-block;
+  font-size: 1.8rem;
+  margin-left: 8px;
+  vertical-align: middle;
+  animation: signatureHeartPop 1.5s ease 0.6s both, 
+             heartbeat 1.8s ease 2s infinite;
+  filter: drop-shadow(0 3px 6px rgba(220, 20, 60, 0.3));
+}
+
+@keyframes signatureHeartPop {
+  0% { opacity: 0; transform: scale(0) rotate(-30deg); }
+  60% { opacity: 1; transform: scale(1.3) rotate(10deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 @keyframes signatureAppear {
-  from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-  to { opacity: 1; transform: scale(1) rotate(0deg); }
+  from { 
+    opacity: 0; 
+    transform: scale(0.7) rotate(-8deg) translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) rotate(0deg) translateY(0); 
+  }
 }
 
 /* ============================================
@@ -1124,6 +1159,182 @@ h1, h2, h3 {
 }
 
 /* ============================================
+   PRELOADER
+============================================ */
+.preloader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  background: var(--gradient-hero);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  overflow: hidden;
+}
+
+.preloader-hearts {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+.preloader-hearts span {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.5;
+  animation: floatAround 4s ease-in-out infinite;
+}
+.preloader-hearts span:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+.preloader-hearts span:nth-child(2) { top: 60%; left: 80%; animation-delay: 1.3s; }
+.preloader-hearts span:nth-child(3) { top: 75%; left: 25%; animation-delay: 2.6s; }
+
+@keyframes floatAround {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(15px, -20px) scale(1.2); }
+}
+
+.preloader-content {
+  text-align: center;
+  color: var(--white);
+  z-index: 2;
+  animation: fadeInUp 0.8s ease;
+}
+
+.preloader-ring {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 25px;
+  border: 4px solid rgba(255,255,255,0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinRing 1.2s linear infinite;
+}
+
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+.preloader-heart-beat {
+  font-size: 2rem;
+  animation: heartbeat 1s ease infinite;
+}
+
+.preloader-text {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+  animation: hintPulse 1.5s ease-in-out infinite;
+}
+
+.preloader-bar {
+  width: 250px;
+  height: 8px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.preloader-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--white);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* ============================================
+   LOVE QUESTION SCREEN
+============================================ */
+.love-question {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  background: var(--gradient-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  overflow: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.love-question.hiding {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.question-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  color: var(--white);
+  padding: 20px;
+  animation: fadeInUp 1s ease;
+}
+
+.question-title {
+  font-size: 2.5rem;
+  margin-bottom: 25px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.question-gif-frame {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto 30px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 5px solid var(--white);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.question-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.question-buttons {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  min-height: 70px;
+}
+
+.yes-btn, .no-btn {
+  padding: 15px 35px;
+  border-radius: 50px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.25s ease, background 0.3s ease;
+}
+
+.yes-btn {
+  background: var(--white);
+  color: var(--red-crimson);
+}
+
+.yes-btn:hover {
+  box-shadow: 0 5px 20px rgba(255,255,255,0.6);
+}
+
+.no-btn {
+  background: rgba(255,255,255,0.3);
+  color: var(--white);
+  border: 2px solid var(--white);
+  z-index: 20;
+}
+
+/* ============================================
    RESPONSIVE - TABLET
 ============================================ */
 @media (max-width: 768px) {
@@ -1161,6 +1372,7 @@ h1, h2, h3 {
   .letter-paper { padding: 35px 25px; }
   .typewriter-text { font-size: 0.95rem; }
   .letter-signature-name { font-size: 2.5rem; }
+  .signature-flourish { font-size: 1.5rem; }
 }
 
 /* ============================================
@@ -1202,5 +1414,11 @@ h1, h2, h3 {
   .letter-paper { padding: 25px 18px; }
   .typewriter-text { font-size: 0.85rem; line-height: 1.8; }
   .letter-signature-name { font-size: 2rem; }
+  .signature-flourish { font-size: 1.2rem; }
   .envelope-hint { font-size: 0.85rem; }
+
+  /* Love Question Responsive */
+  .question-title { font-size: 1.6rem; }
+  .question-gif-frame { width: 180px; height: 180px; }
+  .yes-btn, .no-btn { padding: 12px 25px; font-size: 0.95rem; }
 }

@@ -7,23 +7,17 @@ const CONFIG = {
 };
 
 // ============================================
-// 💌 LOVE LETTER CONTENT - I-EDIT MO DITO!
+// 💌 LOVE LETTER CONTENT
 // ============================================
-const LOVE_LETTER = `Mahal kong Dovy,
+const LOVE_LETTER = `Dearest Leah Mae Yabaobao, my Dovy,
 
-Simula noong dumating ka sa buhay ko, lahat ay nagbago. Hindi ko inakala na isang araw, makakahanap ako ng taong magpaparamdam sa akin ng ganitong kaligaya.
+Happy 15th monthsary sa atin. Alam kong marami pa tayong tatahaking landas, pero hindi ko mapigilang mamangha sa layo na ng narating ng ating pagmamahalan.
 
-Sa bawat ngiti mo, nakakahanap ako ng dahilan para ngumiti rin. Sa bawat yakap mo, nararamdaman ko ang pinakamainit at pinakaligtas na mundo. Ikaw ang aking pahinga sa hirap ng araw, at ikaw ang aking liwanag sa dilim ng gabi.
+Gusto ko lang ipaalala sa iyo ang ating mga pangako at ang mga pangarap na ating prayoridad. Palagi mong tatandaan: unahin mo ang iyong sarili at ang iyong paglago, dahil ang matatag na ikaw ang bumubuo sa matatag na 'tayo.'
 
-Hindi ako perpekto, alam ko 'yon. Pero sa bawat pagkakamali ko, nandyan ka pa rin. Minahal mo ako hindi dahil sa ako'y perpekto, kundi dahil sa tunay na pagmamahal ang nasa puso mo.
+Mahal na mahal kita. Gagawin ko ang lahat para maibigay ang pinakamabuting bersyon ng sarili ko para sa iyo. Maraming salamat sa walang sawang pagsuporta sa mga desisyon ko na alam nating para sa ikabubuti nating dalawa. I will love you for the rest of my life.
 
-Ipinagpapasalamat ko ang bawat segundo na kasama kita — ang bawat tawanan, ang bawat luha, ang bawat simpleng sandali na hindi mo alam na pinapahalagahan ko.
-
-Sa 15 buwan na 'to, mas lalo kong naiintindihan na ikaw ang para sa akin. At sa mga susunod pang araw, buwan, at taon — nandito lang ako, mamahalin kita nang higit pa sa kaya kong sabihin.
-
-Ikaw ang aking tahanan, Dovy. Ikaw ang aking forever.
-
-Sa bawat araw na dumadaan, mas lalo kitang minamahal.`;
+I love you always, Dovy.`;
 
 // ============================================
 // FALLING HEARTS
@@ -114,7 +108,8 @@ setInterval(updateFullCountdown, 1000);
 updateFullCountdown();
 
 // ============================================
-// PASSWORD / LOCK SCREEN (may localStorage memory na)
+// PASSWORD / LOCK SCREEN
+// ✅ WALANG localStorage - palaging mag-lolock kapag nag-refresh/bumisita
 // ============================================
 const passwordInput = document.getElementById('passwordInput');
 const unlockBtn = document.getElementById('unlockBtn');
@@ -122,35 +117,17 @@ const errorMsg = document.getElementById('errorMsg');
 const lockScreen = document.getElementById('lockScreen');
 const mainContent = document.getElementById('mainContent');
 
-const STORAGE_KEY = 'loveydovy_unlocked';
-
-// I-check agad pag-load ng page kung naka-unlock na dati
-function checkIfAlreadyUnlocked() {
-  const isUnlocked = localStorage.getItem(STORAGE_KEY);
-
-  if (isUnlocked === 'true') {
-    lockScreen.classList.add('hidden');
-    mainContent.classList.remove('hidden');
-    return true;
-  }
-  return false;
-}
-
 function checkPassword() {
   const enteredPassword = passwordInput.value.trim().toLowerCase();
 
   if (enteredPassword === CONFIG.password.toLowerCase()) {
-    localStorage.setItem(STORAGE_KEY, 'true');
-
     lockScreen.style.transition = "opacity 0.8s ease, transform 0.8s ease";
     lockScreen.style.opacity = "0";
     lockScreen.style.transform = "scale(1.1)";
 
     setTimeout(() => {
       lockScreen.classList.add('hidden');
-      mainContent.classList.remove('hidden');
-      triggerConfettiWelcome();
-      playSong(); // ✅ AUTOPLAY MUSIC after unlocking
+      showPreloader(); // ✅ Preloader muna, tapos love question screen
     }, 800);
   } else {
     errorMsg.textContent = "Mali yan! Subukan mo ulit 😊";
@@ -177,20 +154,6 @@ shakeStyle.innerHTML = `
   }
 `;
 document.head.appendChild(shakeStyle);
-
-// I-check agad pag-load ng page kung naka-unlock na dati
-checkIfAlreadyUnlocked();
-
-// ============================================
-// RESET LOCK (para sa testing lang)
-// Sa Console (F12): i-type ang resetLock()
-// ============================================
-function resetLock() {
-  localStorage.removeItem(STORAGE_KEY);
-  console.log("🔒 Lock reset! I-refresh ang page para makita ulit ang password screen.");
-}
-
-window.resetLock = resetLock;
 
 // ============================================
 // CONFETTI WELCOME
@@ -442,7 +405,6 @@ function openCardModal(originalContent) {
   const clone = originalContent.cloneNode(true);
   modalBody.appendChild(clone);
 
-  // ✅ BAGO: I-set ang blurred background image sa bawat slide
   clone.querySelectorAll('.carousel-slide').forEach(slide => {
     const img = slide.querySelector('img');
     if (img) {
@@ -499,40 +461,32 @@ const letterSubtitle = document.getElementById('letterSubtitle');
 
 let letterOpened = false;
 
-// Click envelope to open
 envelope.addEventListener('click', async () => {
   if (letterOpened) return;
   letterOpened = true;
 
-  // Phase 1: Open envelope flap
   envelope.classList.add('opening');
   await delay(900);
 
-  // Phase 2: Fade out envelope
   envelopeContainer.classList.add('hiding');
   await delay(600);
   envelopeContainer.style.display = 'none';
 
-  // Phase 3: Show letter paper
   letterContainer.classList.remove('hidden');
   letterSubtitle.textContent = "✨ Para sa'yo, Dovy ✨";
   await delay(200);
   letterPaper.classList.add('visible');
 
-  // Phase 4: Create ambient sparkles
   await delay(800);
   createAmbientSparkles();
 
-  // Phase 5: Typewriter effect
   typewriterCursor.style.display = 'inline-block';
   await typewriterEffect(typewriterText, LOVE_LETTER, 35);
 
-  // Phase 6: Hide cursor, show signature
   typewriterCursor.style.display = 'none';
   await delay(500);
-  letterFooter.classList.remove('hidden');
+  letterFooter.classList.remove('hidden'); letterFooter.classList.add('visible');
 
-  // Phase 7: Final sparkle burst
   createSparkleBurst();
 });
 
@@ -558,7 +512,7 @@ async function typewriterEffect(element, text, speed = 35) {
 }
 
 // ============================================
-// AMBIENT SPARKLES (floating around letter)
+// AMBIENT SPARKLES
 // ============================================
 function createAmbientSparkles() {
   const symbols = ['✨', '💫', '⭐', '🌟', '💖'];
@@ -580,7 +534,7 @@ function createAmbientSparkles() {
 }
 
 // ============================================
-// TYPEWRITER SPARKLE (appears as text types)
+// TYPEWRITER SPARKLE
 // ============================================
 function createTypewriterSparkle(element) {
   const sparkle = document.createElement('span');
@@ -609,7 +563,7 @@ function createTypewriterSparkle(element) {
 }
 
 // ============================================
-// SPARKLE BURST (pag natapos na ang letter)
+// SPARKLE BURST
 // ============================================
 function createSparkleBurst() {
   const symbols = ['✨', '💖', '💕', '💗', '⭐', '🌟'];
@@ -656,5 +610,87 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
 });
+
+// ============================================
+// 🎀 PRELOADER + LOVE QUESTION FLOW
+// ============================================
+const preloader = document.getElementById('preloader');
+const preloaderFill = document.getElementById('preloaderFill');
+const loveQuestion = document.getElementById('loveQuestion');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+
+createFallingHearts('fallingHeartsQuestion', 15);
+
+const noMessages = [
+  "Hindi 😢",
+  "Sigurado ka ba? 🥺",
+  "Ayaw mo talaga? 😭",
+  "Pag-isipan mo pa! 🥹",
+  "Huli ka na... 😳",
+  "Hindi mo ako mahuhuli! 😝",
+  "Try ulit! 😜",
+  "Wala ka nang choice! 😆"
+];
+let noAttempts = 0;
+
+function moveNoButton() {
+  noAttempts++;
+
+  const scale = Math.min(1 + noAttempts * 0.15, 2.2);
+  yesBtn.style.transform = `scale(${scale})`;
+
+  noBtn.textContent = noMessages[Math.min(noAttempts, noMessages.length - 1)];
+
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const maxX = window.innerWidth - btnWidth - 20;
+  const maxY = window.innerHeight - btnHeight - 20;
+
+  const randomX = Math.max(20, Math.random() * maxX);
+  const randomY = Math.max(20, Math.random() * maxY);
+
+  noBtn.style.position = 'fixed';
+  noBtn.style.left = randomX + 'px';
+  noBtn.style.top = randomY + 'px';
+  noBtn.style.transition = 'top 0.3s ease, left 0.3s ease';
+}
+
+noBtn.addEventListener('mouseenter', moveNoButton);
+noBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  moveNoButton();
+});
+noBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  moveNoButton();
+});
+
+yesBtn.addEventListener('click', () => {
+  loveQuestion.classList.add('hiding');
+  setTimeout(() => {
+    loveQuestion.classList.add('hidden');
+    mainContent.classList.remove('hidden');
+    triggerConfettiWelcome();
+    playSong();
+  }, 600);
+});
+
+function showPreloader() {
+  preloader.classList.remove('hidden');
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 15 + 5;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        loveQuestion.classList.remove('hidden');
+      }, 400);
+    }
+    preloaderFill.style.width = progress + '%';
+  }, 250);
+}
 
 console.log("💕 Loveydovy 15th Monthsary Website - Loaded Successfully!");

@@ -114,7 +114,7 @@ setInterval(updateFullCountdown, 1000);
 updateFullCountdown();
 
 // ============================================
-// PASSWORD / LOCK SCREEN
+// PASSWORD / LOCK SCREEN (with localStorage memory)
 // ============================================
 const passwordInput = document.getElementById('passwordInput');
 const unlockBtn = document.getElementById('unlockBtn');
@@ -122,10 +122,28 @@ const errorMsg = document.getElementById('errorMsg');
 const lockScreen = document.getElementById('lockScreen');
 const mainContent = document.getElementById('mainContent');
 
+const STORAGE_KEY = 'loveydovy_unlocked';
+
+// Check muna pag-load ng page kung naka-unlock na dati
+function checkIfAlreadyUnlocked() {
+  const isUnlocked = localStorage.getItem(STORAGE_KEY);
+
+  if (isUnlocked === 'true') {
+    // Diretso na sa main content, walang animation, walang delay
+    lockScreen.classList.add('hidden');
+    mainContent.classList.remove('hidden');
+    return true;
+  }
+  return false;
+}
+
 function checkPassword() {
   const enteredPassword = passwordInput.value.trim().toLowerCase();
 
   if (enteredPassword === CONFIG.password.toLowerCase()) {
+    // I-save sa localStorage na "unlocked na" siya
+    localStorage.setItem(STORAGE_KEY, 'true');
+
     lockScreen.style.transition = "opacity 0.8s ease, transform 0.8s ease";
     lockScreen.style.opacity = "0";
     lockScreen.style.transform = "scale(1.1)";
@@ -145,6 +163,9 @@ function checkPassword() {
     }, 10);
   }
 }
+
+// I-check agad pag-load ng page
+const alreadyUnlocked = checkIfAlreadyUnlocked();
 
 unlockBtn.addEventListener('click', checkPassword);
 passwordInput.addEventListener('keypress', function(e) {

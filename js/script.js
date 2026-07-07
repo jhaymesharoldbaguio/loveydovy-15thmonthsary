@@ -39,7 +39,7 @@ function createFallingHearts(containerId, count = 20) {
     heart.classList.add('heart');
     heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
     heart.style.left = Math.random() * 100 + '%';
-    heart.style.animationDuration = (Math.random() * 3 + 4) - 's';
+    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
     heart.style.animationDelay = Math.random() * 5 + 's';
     heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
     container.appendChild(heart);
@@ -114,7 +114,7 @@ setInterval(updateFullCountdown, 1000);
 updateFullCountdown();
 
 // ============================================
-// PASSWORD / LOCK SCREEN (with localStorage memory)
+// PASSWORD / LOCK SCREEN (may localStorage memory na)
 // ============================================
 const passwordInput = document.getElementById('passwordInput');
 const unlockBtn = document.getElementById('unlockBtn');
@@ -124,12 +124,11 @@ const mainContent = document.getElementById('mainContent');
 
 const STORAGE_KEY = 'loveydovy_unlocked';
 
-// Check muna pag-load ng page kung naka-unlock na dati
+// I-check agad pag-load ng page kung naka-unlock na dati
 function checkIfAlreadyUnlocked() {
   const isUnlocked = localStorage.getItem(STORAGE_KEY);
 
   if (isUnlocked === 'true') {
-    // Diretso na sa main content, walang animation, walang delay
     lockScreen.classList.add('hidden');
     mainContent.classList.remove('hidden');
     return true;
@@ -141,7 +140,6 @@ function checkPassword() {
   const enteredPassword = passwordInput.value.trim().toLowerCase();
 
   if (enteredPassword === CONFIG.password.toLowerCase()) {
-    // I-save sa localStorage na "unlocked na" siya
     localStorage.setItem(STORAGE_KEY, 'true');
 
     lockScreen.style.transition = "opacity 0.8s ease, transform 0.8s ease";
@@ -152,6 +150,7 @@ function checkPassword() {
       lockScreen.classList.add('hidden');
       mainContent.classList.remove('hidden');
       triggerConfettiWelcome();
+      playSong(); // ✅ AUTOPLAY MUSIC after unlocking
     }, 800);
   } else {
     errorMsg.textContent = "Mali yan! Subukan mo ulit 😊";
@@ -163,9 +162,6 @@ function checkPassword() {
     }, 10);
   }
 }
-
-// I-check agad pag-load ng page
-const alreadyUnlocked = checkIfAlreadyUnlocked();
 
 unlockBtn.addEventListener('click', checkPassword);
 passwordInput.addEventListener('keypress', function(e) {
@@ -181,6 +177,20 @@ shakeStyle.innerHTML = `
   }
 `;
 document.head.appendChild(shakeStyle);
+
+// I-check agad pag-load ng page kung naka-unlock na dati
+checkIfAlreadyUnlocked();
+
+// ============================================
+// RESET LOCK (para sa testing lang)
+// Sa Console (F12): i-type ang resetLock()
+// ============================================
+function resetLock() {
+  localStorage.removeItem(STORAGE_KEY);
+  console.log("🔒 Lock reset! I-refresh ang page para makita ulit ang password screen.");
+}
+
+window.resetLock = resetLock;
 
 // ============================================
 // CONFETTI WELCOME
@@ -305,8 +315,11 @@ const musicNextBtn = document.getElementById('nextBtn');
 const songTitle = document.getElementById('songTitle');
 
 const playlist = [
-  { title: "The Ridley Be With You", src: "music/song1.mp3" },
-  { title: "The Ridleys Aphrodisiac", src: "music/song2.mp3" }
+  { title: "Be With You", src: "music/Be With You.mp3" },
+  { title: "Aphrodite", src: "music/Aphrodite.mp3" },
+  { title: "Ikaw Lang", src: "music/Ikaw Lang.mp3" },
+  { title: "RomCom", src: "music/RomCom.mp3" },
+  { title: "Tibok", src: "music/Tibok.mp3" }
 ];
 
 let currentSongIndex = 0;
@@ -491,11 +504,11 @@ envelope.addEventListener('click', async () => {
   await delay(600);
   envelopeContainer.style.display = 'none';
 
- // Phase 3: Show letter paper
-letterContainer.classList.remove('hidden');
-letterSubtitle.textContent = "✨ Para sa'yo, Dovy ✨";
-await delay(200);
-letterPaper.classList.add('visible');
+  // Phase 3: Show letter paper
+  letterContainer.classList.remove('hidden');
+  letterSubtitle.textContent = "✨ Para sa'yo, Dovy ✨";
+  await delay(200);
+  letterPaper.classList.add('visible');
 
   // Phase 4: Create ambient sparkles
   await delay(800);
@@ -527,7 +540,6 @@ async function typewriterEffect(element, text, speed = 35) {
       element.innerHTML += text[i];
     }
 
-    // Occasional sparkle as text types
     if (text[i] !== ' ' && text[i] !== '\n' && Math.random() > 0.88) {
       createTypewriterSparkle(element);
     }
@@ -569,7 +581,6 @@ function createTypewriterSparkle(element) {
   sparkle.style.pointerEvents = 'none';
   sparkle.style.zIndex = '10';
 
-  // Random position near the text
   const rect = element.getBoundingClientRect();
   sparkle.style.left = (rect.left + rect.width * Math.random()) + 'px';
   sparkle.style.top = (rect.top + rect.height * Math.random()) + 'px';

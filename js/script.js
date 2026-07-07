@@ -441,6 +441,15 @@ function openCardModal(originalContent) {
   modalBody.innerHTML = '';
   const clone = originalContent.cloneNode(true);
   modalBody.appendChild(clone);
+
+  // ✅ BAGO: I-set ang blurred background image sa bawat slide
+  clone.querySelectorAll('.carousel-slide').forEach(slide => {
+    const img = slide.querySelector('img');
+    if (img) {
+      slide.style.setProperty('--bg-image', `url("${img.src}")`);
+    }
+  });
+
   const clonedCarousel = clone.querySelector('[data-carousel]');
   if (clonedCarousel) setupCarousel(clonedCarousel);
   cardModal.classList.add('active');

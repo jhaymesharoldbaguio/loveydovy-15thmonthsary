@@ -627,17 +627,71 @@ h1, h2, h3 {
 }
 
 .modal-content .carousel-slide {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+/* Blurred zoomed-in background para punuin ang blangkong space */
+.modal-content .carousel-slide::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.6);
+  z-index: 0;
 }
 
 .modal-content .carousel-slide img {
+  position: relative;
+  z-index: 1;
   width: auto;
   height: auto;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+}
+
+.modal-content .carousel-slide img {
+ width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+.modal-content .carousel-slide {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.modal-content .carousel-slide::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.7);
+  transform: scale(1.1);
+  z-index: 0;
+}
+
+.modal-content .carousel-slide img {
+  position: relative;
+  z-index: 1;
 }
 
 .modal-content .timeline-content {

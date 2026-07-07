@@ -1,5 +1,5 @@
 // ============================================
-// CONFIGURATION - I-EDIT MO DITO
+// CONFIGURATION
 // ============================================
 const CONFIG = {
   password: "loveydovy",
@@ -7,7 +7,26 @@ const CONFIG = {
 };
 
 // ============================================
-// FALLING HEARTS ANIMATION
+// 💌 LOVE LETTER CONTENT - I-EDIT MO DITO!
+// ============================================
+const LOVE_LETTER = `Mahal kong Dovy,
+
+Simula noong dumating ka sa buhay ko, lahat ay nagbago. Hindi ko inakala na isang araw, makakahanap ako ng taong magpaparamdam sa akin ng ganitong kaligaya.
+
+Sa bawat ngiti mo, nakakahanap ako ng dahilan para ngumiti rin. Sa bawat yakap mo, nararamdaman ko ang pinakamainit at pinakaligtas na mundo. Ikaw ang aking pahinga sa hirap ng araw, at ikaw ang aking liwanag sa dilim ng gabi.
+
+Hindi ako perpekto, alam ko 'yon. Pero sa bawat pagkakamali ko, nandyan ka pa rin. Minahal mo ako hindi dahil sa ako'y perpekto, kundi dahil sa tunay na pagmamahal ang nasa puso mo.
+
+Ipinagpapasalamat ko ang bawat segundo na kasama kita — ang bawat tawanan, ang bawat luha, ang bawat simpleng sandali na hindi mo alam na pinapahalagahan ko.
+
+Sa 15 buwan na 'to, mas lalo kong naiintindihan na ikaw ang para sa akin. At sa mga susunod pang araw, buwan, at taon — nandito lang ako, mamahalin kita nang higit pa sa kaya kong sabihin.
+
+Ikaw ang aking tahanan, Dovy. Ikaw ang aking forever.
+
+Sa bawat araw na dumadaan, mas lalo kitang minamahal.`;
+
+// ============================================
+// FALLING HEARTS
 // ============================================
 function createFallingHearts(containerId, count = 20) {
   const container = document.getElementById(containerId);
@@ -20,7 +39,7 @@ function createFallingHearts(containerId, count = 20) {
     heart.classList.add('heart');
     heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
     heart.style.left = Math.random() * 100 + '%';
-    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+    heart.style.animationDuration = (Math.random() * 3 + 4) - 's';
     heart.style.animationDelay = Math.random() * 5 + 's';
     heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
     container.appendChild(heart);
@@ -29,6 +48,13 @@ function createFallingHearts(containerId, count = 20) {
 
 createFallingHearts('fallingHearts', 25);
 createFallingHearts('fallingHeartsMain', 15);
+
+// ============================================
+// HELPER: Promise-based delay
+// ============================================
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // ============================================
 // COUNTDOWN - MINI (Lock Screen)
@@ -41,10 +67,7 @@ function updateMiniCountdown() {
   const daysEl = document.getElementById('days');
   if (!daysEl) return;
 
-  if (distance < 0) {
-    daysEl.textContent = "0";
-    return;
-  }
+  if (distance < 0) { daysEl.textContent = "0"; return; }
 
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
   daysEl.textContent = days;
@@ -91,7 +114,7 @@ setInterval(updateFullCountdown, 1000);
 updateFullCountdown();
 
 // ============================================
-// PASSWORD / LOCK SCREEN LOGIC
+// PASSWORD / LOCK SCREEN
 // ============================================
 const passwordInput = document.getElementById('passwordInput');
 const unlockBtn = document.getElementById('unlockBtn');
@@ -112,12 +135,10 @@ function checkPassword() {
       mainContent.classList.remove('hidden');
       triggerConfettiWelcome();
     }, 800);
-
   } else {
     errorMsg.textContent = "Mali yan! Subukan mo ulit 😊";
     passwordInput.value = "";
     passwordInput.focus();
-    
     passwordInput.style.animation = "none";
     setTimeout(() => {
       passwordInput.style.animation = "shake 0.5s ease";
@@ -127,9 +148,7 @@ function checkPassword() {
 
 unlockBtn.addEventListener('click', checkPassword);
 passwordInput.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    checkPassword();
-  }
+  if (e.key === 'Enter') checkPassword();
 });
 
 const shakeStyle = document.createElement('style');
@@ -147,9 +166,8 @@ document.head.appendChild(shakeStyle);
 // ============================================
 function triggerConfettiWelcome() {
   const colors = ['#ff6b9d', '#ff8fab', '#ffb3c6', '#dc143c', '#ffffff'];
-  const confettiCount = 60;
 
-  for (let i = 0; i < confettiCount; i++) {
+  for (let i = 0; i < 60; i++) {
     setTimeout(() => {
       createConfettiPiece(colors[Math.floor(Math.random() * colors.length)]);
     }, i * 20);
@@ -227,13 +245,8 @@ class Particle {
 
 function animateParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   particles = particles.filter(p => p.life > 0);
-  particles.forEach(p => {
-    p.update();
-    p.draw();
-  });
-
+  particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animateParticles);
 }
 
@@ -286,7 +299,7 @@ function loadSong(index) {
 
 function playSong() {
   audioPlayer.play().catch(err => {
-    console.log("Autoplay blocked, need user interaction first:", err);
+    console.log("Autoplay blocked:", err);
   });
   isPlaying = true;
   playPauseBtn.textContent = "⏸️";
@@ -299,11 +312,7 @@ function pauseSong() {
 }
 
 playPauseBtn.addEventListener('click', () => {
-  if (isPlaying) {
-    pauseSong();
-  } else {
-    playSong();
-  }
+  isPlaying ? pauseSong() : playSong();
 });
 
 musicNextBtn.addEventListener('click', () => {
@@ -318,25 +327,18 @@ musicPrevBtn.addEventListener('click', () => {
   if (isPlaying) playSong();
 });
 
-audioPlayer.addEventListener('ended', () => {
-  musicNextBtn.click();
-});
-
+audioPlayer.addEventListener('ended', () => musicNextBtn.click());
 loadSong(currentSongIndex);
 
 // ============================================
-// REASON CARDS - FLIP ON CLICK
+// REASON CARDS - FLIP
 // ============================================
-const reasonCards = document.querySelectorAll('.reason-card');
-
-reasonCards.forEach(card => {
-  card.addEventListener('click', () => {
-    card.classList.toggle('flipped');
-  });
+document.querySelectorAll('.reason-card').forEach(card => {
+  card.addEventListener('click', () => card.classList.toggle('flipped'));
 });
 
 // ============================================
-// GALLERY CAROUSEL (Reusable - gagana sa page at sa modal)
+// GALLERY CAROUSEL
 // ============================================
 function setupCarousel(carousel) {
   const track = carousel.querySelector('.carousel-track');
@@ -353,11 +355,7 @@ function setupCarousel(carousel) {
     const dot = document.createElement('div');
     dot.classList.add('carousel-dot');
     if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', (e) => {
-      e.stopPropagation();
-      goToSlide(i);
-      resetAutoSlide();
-    });
+    dot.addEventListener('click', (e) => { e.stopPropagation(); goToSlide(i); resetAutoSlide(); });
     dotsContainer.appendChild(dot);
   }
 
@@ -365,82 +363,40 @@ function setupCarousel(carousel) {
 
   function updateCarousel() {
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentIndex);
-    });
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
   }
 
-  function goToSlide(index) {
-    currentIndex = index;
-    updateCarousel();
-  }
+  function goToSlide(index) { currentIndex = index; updateCarousel(); }
+  function nextSlide() { currentIndex = (currentIndex + 1) % totalSlides; updateCarousel(); }
+  function prevSlide() { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarousel(); }
 
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % totalSlides;
-    updateCarousel();
-  }
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextSlide(); resetAutoSlide(); });
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevSlide(); resetAutoSlide(); });
 
-  function prevSlide() {
-    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-    updateCarousel();
-  }
-
-  nextBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    nextSlide();
-    resetAutoSlide();
-  });
-
-  prevBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    prevSlide();
-    resetAutoSlide();
-  });
-
-  let touchStartX = 0;
-  let touchEndX = 0;
-
-  track.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
-
+  let touchStartX = 0, touchEndX = 0;
+  track.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
   track.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
+    const diff = touchStartX - touchEndX;
+    if (diff > 50) { nextSlide(); resetAutoSlide(); }
+    else if (diff < -50) { prevSlide(); resetAutoSlide(); }
   });
 
-  function handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-    if (diff > swipeThreshold) {
-      nextSlide();
-      resetAutoSlide();
-    } else if (diff < -swipeThreshold) {
-      prevSlide();
-      resetAutoSlide();
-    }
-  }
-
   let autoSlideInterval = setInterval(nextSlide, 5000);
-
-  function resetAutoSlide() {
-    clearInterval(autoSlideInterval);
-    autoSlideInterval = setInterval(nextSlide, 5000);
-  }
+  function resetAutoSlide() { clearInterval(autoSlideInterval); autoSlideInterval = setInterval(nextSlide, 5000); }
 
   carousel._autoSlideInterval = autoSlideInterval;
   carousel._clearAutoSlide = () => clearInterval(autoSlideInterval);
 }
 
 function initAllCarousels() {
-  const carousels = document.querySelectorAll('[data-carousel]');
-  carousels.forEach(carousel => setupCarousel(carousel));
+  document.querySelectorAll('[data-carousel]').forEach(c => setupCarousel(c));
 }
 
 initAllCarousels();
 
 // ============================================
-// TIMELINE CARD MODAL (Pop-up sa gitna ng screen)
+// TIMELINE CARD MODAL
 // ============================================
 const cardModal = document.getElementById('cardModal');
 const modalBody = document.getElementById('modalBody');
@@ -449,15 +405,10 @@ const modalOverlay = document.getElementById('modalOverlay');
 
 function openCardModal(originalContent) {
   modalBody.innerHTML = '';
-
   const clone = originalContent.cloneNode(true);
   modalBody.appendChild(clone);
-
   const clonedCarousel = clone.querySelector('[data-carousel]');
-  if (clonedCarousel) {
-    setupCarousel(clonedCarousel);
-  }
-
+  if (clonedCarousel) setupCarousel(clonedCarousel);
   cardModal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -465,52 +416,194 @@ function openCardModal(originalContent) {
 function closeCardModal() {
   cardModal.classList.remove('active');
   document.body.style.overflow = '';
-
   const clonedCarousel = modalBody.querySelector('[data-carousel]');
-  if (clonedCarousel && clonedCarousel._clearAutoSlide) {
-    clonedCarousel._clearAutoSlide();
-  }
-
-  setTimeout(() => {
-    modalBody.innerHTML = '';
-  }, 300);
+  if (clonedCarousel && clonedCarousel._clearAutoSlide) clonedCarousel._clearAutoSlide();
+  setTimeout(() => { modalBody.innerHTML = ''; }, 300);
 }
 
 document.querySelectorAll('.timeline-content').forEach(content => {
-  content.addEventListener('click', () => {
-    openCardModal(content);
-  });
+  content.addEventListener('click', () => openCardModal(content));
 });
 
 modalClose.addEventListener('click', closeCardModal);
 modalOverlay.addEventListener('click', closeCardModal);
-
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && cardModal.classList.contains('active')) {
-    closeCardModal();
-  }
+  if (e.key === 'Escape' && cardModal.classList.contains('active')) closeCardModal();
 });
 
 // ============================================
 // TIMELINE - SCROLL ANIMATION
 // ============================================
 const timelineItems = document.querySelectorAll('.timeline-item');
-
-const observerOptions = {
-  threshold: 0.2
-};
-
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, observerOptions);
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.2 });
 
-timelineItems.forEach(item => {
-  observer.observe(item);
+timelineItems.forEach(item => observer.observe(item));
+
+// ============================================
+// ✨ ENCHANTED LOVE LETTER ✨
+// ============================================
+const envelopeContainer = document.getElementById('envelopeContainer');
+const envelope = document.getElementById('envelope');
+const letterContainer = document.getElementById('letterContainer');
+const letterPaper = document.getElementById('letterPaper');
+const typewriterText = document.getElementById('typewriterText');
+const typewriterCursor = document.getElementById('typewriterCursor');
+const letterFooter = document.getElementById('letterFooter');
+const letterSparkles = document.getElementById('letterSparkles');
+const letterSubtitle = document.getElementById('letterSubtitle');
+
+let letterOpened = false;
+
+// Click envelope to open
+envelope.addEventListener('click', async () => {
+  if (letterOpened) return;
+  letterOpened = true;
+
+  // Phase 1: Open envelope flap
+  envelope.classList.add('opening');
+  await delay(900);
+
+  // Phase 2: Fade out envelope
+  envelopeContainer.classList.add('hiding');
+  await delay(600);
+  envelopeContainer.style.display = 'none';
+
+ // Phase 3: Show letter paper
+letterContainer.classList.remove('hidden');
+letterSubtitle.textContent = "✨ Para sa'yo, Dovy ✨";
+await delay(200);
+letterPaper.classList.add('visible');
+
+  // Phase 4: Create ambient sparkles
+  await delay(800);
+  createAmbientSparkles();
+
+  // Phase 5: Typewriter effect
+  typewriterCursor.style.display = 'inline-block';
+  await typewriterEffect(typewriterText, LOVE_LETTER, 35);
+
+  // Phase 6: Hide cursor, show signature
+  typewriterCursor.style.display = 'none';
+  await delay(500);
+  letterFooter.classList.remove('hidden');
+
+  // Phase 7: Final sparkle burst
+  createSparkleBurst();
 });
+
+// ============================================
+// TYPEWRITER FUNCTION
+// ============================================
+async function typewriterEffect(element, text, speed = 35) {
+  element.innerHTML = '';
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '\n') {
+      element.innerHTML += '<br>';
+    } else {
+      element.innerHTML += text[i];
+    }
+
+    // Occasional sparkle as text types
+    if (text[i] !== ' ' && text[i] !== '\n' && Math.random() > 0.88) {
+      createTypewriterSparkle(element);
+    }
+
+    await delay(speed);
+  }
+}
+
+// ============================================
+// AMBIENT SPARKLES (floating around letter)
+// ============================================
+function createAmbientSparkles() {
+  const symbols = ['✨', '💫', '⭐', '🌟', '💖'];
+  const container = letterSparkles;
+
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const sparkle = document.createElement('span');
+      sparkle.className = 'ambient-sparkle';
+      sparkle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      sparkle.style.left = Math.random() * 100 + '%';
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      sparkle.style.animationDelay = Math.random() * 2 + 's';
+      sparkle.style.fontSize = (Math.random() * 8 + 10) + 'px';
+      container.appendChild(sparkle);
+    }, i * 300);
+  }
+}
+
+// ============================================
+// TYPEWRITER SPARKLE (appears as text types)
+// ============================================
+function createTypewriterSparkle(element) {
+  const sparkle = document.createElement('span');
+  sparkle.textContent = '✨';
+  sparkle.style.position = 'absolute';
+  sparkle.style.fontSize = '12px';
+  sparkle.style.pointerEvents = 'none';
+  sparkle.style.zIndex = '10';
+
+  // Random position near the text
+  const rect = element.getBoundingClientRect();
+  sparkle.style.left = (rect.left + rect.width * Math.random()) + 'px';
+  sparkle.style.top = (rect.top + rect.height * Math.random()) + 'px';
+
+  letterSparkles.appendChild(sparkle);
+
+  sparkle.animate([
+    { opacity: 0, transform: 'scale(0) translateY(0)' },
+    { opacity: 1, transform: 'scale(1) translateY(-15px)' },
+    { opacity: 0, transform: 'scale(0.5) translateY(-30px)' }
+  ], {
+    duration: 800,
+    easing: 'ease-out'
+  });
+
+  setTimeout(() => sparkle.remove(), 800);
+}
+
+// ============================================
+// SPARKLE BURST (pag natapos na ang letter)
+// ============================================
+function createSparkleBurst() {
+  const symbols = ['✨', '💖', '💕', '💗', '⭐', '🌟'];
+  const container = letterSparkles;
+
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const sparkle = document.createElement('span');
+      sparkle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      sparkle.style.position = 'absolute';
+      sparkle.style.left = '50%';
+      sparkle.style.bottom = '0';
+      sparkle.style.fontSize = (Math.random() * 12 + 10) + 'px';
+      sparkle.style.pointerEvents = 'none';
+      sparkle.style.zIndex = '10';
+
+      const angle = Math.random() * Math.PI;
+      const distance = Math.random() * 150 + 50;
+      const moveX = Math.cos(angle) * distance;
+      const moveY = -Math.abs(Math.sin(angle) * distance);
+
+      container.appendChild(sparkle);
+
+      sparkle.animate([
+        { opacity: 1, transform: `translate(0, 0) scale(1)` },
+        { opacity: 0, transform: `translate(${moveX}px, ${moveY}px) scale(0.3)` }
+      ], {
+        duration: 1200,
+        easing: 'ease-out'
+      });
+
+      setTimeout(() => sparkle.remove(), 1200);
+    }, i * 50);
+  }
+}
 
 // ============================================
 // SMOOTH SCROLL
@@ -519,9 +612,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
 });
 

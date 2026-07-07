@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<!-- ============ MAIN CONTENT (Hidden muna) ============ -->
+<!-- ============ MAIN CONTENT ============ -->
 <div id="mainContent" class="main-content hidden">
 
   <!-- ===== HERO SECTION ===== -->
@@ -79,11 +79,9 @@
 
     <div class="timeline-container">
       
-      <!-- ===== OUR FIRST DATE ===== -->
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-content">
-          
           <div class="gallery-carousel" data-carousel>
             <div class="carousel-track">
               <div class="carousel-slide">
@@ -103,18 +101,15 @@
             <button class="carousel-btn next-btn">›</button>
             <div class="carousel-dots"></div>
           </div>
-
           <h3>Our First Date 💐</h3>
           <p>Ilagay mo dito yung story ng first date niyo...</p>
           <span class="timeline-date">Date here</span>
         </div>
       </div>
 
-      <!-- ===== MILESTONES ===== -->
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-content">
-          
           <div class="gallery-carousel" data-carousel>
             <div class="carousel-track">
               <div class="carousel-slide">
@@ -134,38 +129,34 @@
             <button class="carousel-btn next-btn">›</button>
             <div class="carousel-dots"></div>
           </div>
-
           <h3>Milestones 🎉</h3>
           <p>Ilagay mo dito yung mga achievements niyo as couple...</p>
           <span class="timeline-date">Date here</span>
         </div>
       </div>
 
-      <!-- ===== FUNNY MOMENTS ===== -->
       <div class="timeline-item">
         <div class="timeline-dot"></div>
         <div class="timeline-content">
-          
           <div class="gallery-carousel" data-carousel>
             <div class="carousel-track">
               <div class="carousel-slide">
-                <img src="images/funny1.jpg" alt="Funny Moment 1" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+1'">
+                <img src="images/funny1.jpg" alt="Funny 1" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+1'">
               </div>
               <div class="carousel-slide">
-                <img src="images/funny2.jpg" alt="Funny Moment 2" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+2'">
+                <img src="images/funny2.jpg" alt="Funny 2" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+2'">
               </div>
               <div class="carousel-slide">
-                <img src="images/funny3.jpg" alt="Funny Moment 3" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+3'">
+                <img src="images/funny3.jpg" alt="Funny 3" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+3'">
               </div>
               <div class="carousel-slide">
-                <img src="images/funny4.jpg" alt="Funny Moment 4" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+4'">
+                <img src="images/funny4.jpg" alt="Funny 4" onerror="this.src='https://via.placeholder.com/400x300/ffb3c6/ffffff?text=Funny+4'">
               </div>
             </div>
             <button class="carousel-btn prev-btn">‹</button>
             <button class="carousel-btn next-btn">›</button>
             <div class="carousel-dots"></div>
           </div>
-
           <h3>Funny Moments 😂</h3>
           <p>Ilagay mo dito yung mga nakakatawang alaala niyo...</p>
           <span class="timeline-date">Date here</span>
@@ -211,11 +202,39 @@
   <!-- ===== LOVE LETTER SECTION ===== -->
   <section class="letter-section">
     <h2 class="section-title">Isang Liham Para Sa'yo 💌</h2>
-    <div class="letter-box">
-      <p class="letter-text">
-        [Ilalagay dito yung love letter — gagawin natin 'to together later!]
-      </p>
-      <p class="letter-signature">Mahal na mahal kita, <br><span>Lovey</span></p>
+    <p class="section-subtitle" id="letterSubtitle">May nagaantay sayo sa loob...</p>
+
+    <!-- ENVELOPE (Default View) -->
+    <div class="envelope-container" id="envelopeContainer">
+      <div class="envelope-glow"></div>
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+        <div class="envelope-flap" id="envelopeFlap"></div>
+        <div class="envelope-front"></div>
+        <div class="envelope-seal">💌</div>
+      </div>
+      <p class="envelope-hint">✨ I-click para buksan ang sulat ✨</p>
+    </div>
+
+    <!-- LETTER PAPER (Hidden, shows after envelope opens) -->
+    <div class="letter-container hidden" id="letterContainer">
+      <div class="letter-paper" id="letterPaper">
+        <div class="letter-sparkles" id="letterSparkles"></div>
+        <div class="letter-paper-glow"></div>
+        <div class="letter-header">
+          <span class="letter-deco">💕</span>
+          <span class="letter-date-text">15 Monthsary</span>
+          <span class="letter-deco">💕</span>
+        </div>
+        <div class="letter-body">
+          <p class="typewriter-text" id="typewriterText"></p>
+          <span class="typewriter-cursor" id="typewriterCursor"></span>
+        </div>
+        <div class="letter-footer hidden" id="letterFooter">
+          <p class="letter-closing">Mahal na mahal kita,</p>
+          <p class="letter-signature-name">Lovey ❤️</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -241,7 +260,7 @@
     <p class="footer-small">15 Months and Forever Counting...</p>
   </footer>
 
-  <!-- ===== TIMELINE CARD MODAL (Pop-up) ===== -->
+  <!-- ===== TIMELINE CARD MODAL ===== -->
   <div id="cardModal" class="card-modal">
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content" id="modalContentBox">
